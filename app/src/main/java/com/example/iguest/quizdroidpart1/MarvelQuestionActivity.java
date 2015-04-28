@@ -4,55 +4,92 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView;
 import android.view.View;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.RadioGroup;
-import android.view.ViewGroup;
 import android.widget.RadioButton;
-import android.view.View.OnClickListener;
+import android.content.Intent;
 
 
 
 public class MarvelQuestionActivity extends ActionBarActivity {
 
-    final int[] answers = {1,5,4,3};
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_marvel_question);
 
+
+
         TextView question = (TextView) findViewById(R.id.marvelQuestion);
 
         question.setText("When was the Avengers made?");
 
+        button = (Button) findViewById(R.id.btnMarvelSubmit);
+        button.setVisibility(View.GONE);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RadioGroup rg = (RadioGroup) findViewById(R.id.marvelRadioGroup);
+                int id = rg.getCheckedRadioButtonId();
+                View rb = (View) findViewById(id);
+
+                Intent launchingIntent = getIntent();
+
+                int attempts = launchingIntent.getIntExtra("attempts", 0);
+                int count = launchingIntent.getIntExtra("count", 0);
+
+                Intent next;
+                switch (rb.getId()) {
+                    case R.id.answer1:
+                        next = new Intent(MarvelQuestionActivity.this, AnswerActivity.class);
+                        next.putExtra("correctAnswer", "2012");
+                        next.putExtra("user", "2011");
+                        next.putExtra("attempts", attempts + 1);
+                        next.putExtra("total", count);
+                        startActivity(next);
+                        break;
+                    case R.id.answer2:
+                        next = new Intent(MarvelQuestionActivity.this, AnswerActivity.class);
+                        next.putExtra("correctAnswer", "2012");
+                        next.putExtra("user", "2012");
+                        next.putExtra("attempts", attempts + 1);
+                        next.putExtra("total", count);
+                        startActivity(next);
+                        break;
+                    case R.id.answer3:
+                        next = new Intent(MarvelQuestionActivity.this, AnswerActivity.class);
+                        next.putExtra("correctAnswer", "2012");
+                        next.putExtra("user", "2013");
+                        next.putExtra("attempts", attempts + 1);
+                        next.putExtra("total", count);
+                        startActivity(next);
+                        break;
+                    case R.id.answer4:
+                        next = new Intent(MarvelQuestionActivity.this, AnswerActivity.class);
+                        next.putExtra("correctAnswer", "2012");
+                        next.putExtra("user", "2014");
+                        next.putExtra("attempts", attempts + 1);
+                        next.putExtra("total", count);
+                        startActivity(next);
+                        break;
+
+                }
+            }
+
+        });
     }
 
     public void onRadioButtonClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
 
-        switch(view.getId()) {
-            case R.id.answer1:
-                if (checked)
-                    // Pirates are the best
-                    break;
-            case R.id.answer2:
-                if (checked)
-                    // Ninjas rule
-                    break;
-            case R.id.answer3:
-                if (checked)
-                    // Ninjas rule
-                    break;
-            case R.id.answer4:
-                if (checked)
-                    // Ninjas rule
-                    break;
+        if(checked) {
+            button.setVisibility(View.VISIBLE);
         }
     }
 

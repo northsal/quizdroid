@@ -62,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:id="@+id/btnSubmit"
+        android:id="@+id/btnPhysicsSubmit"
         android:layout_below="@+id/physicsRadioGroup"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="43dp" />

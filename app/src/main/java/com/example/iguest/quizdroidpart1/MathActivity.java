@@ -34,6 +34,12 @@ public class MathActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(MathActivity.this, MathQuestionActivity.class);
+                Intent launchingIntent = getIntent();
+
+                int attempts = launchingIntent.getIntExtra("attempts", 0);
+                int count = launchingIntent.getIntExtra("count", 0);
+                next.putExtra("attempts", attempts);
+                next.putExtra("total", count);
                 startActivity(next);
             }
         });

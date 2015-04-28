@@ -19,6 +19,9 @@ public class MainActivity extends ActionBarActivity {
 
     private ListView list;
 
+    private int attempts;
+    private int count;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,17 +32,26 @@ public class MainActivity extends ActionBarActivity {
         ArrayAdapter<String> items = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, options);
         list.setAdapter(items);
 
+        attempts = 0;
+        count = 0;
+
         list.setOnItemClickListener(new ListView.OnItemClickListener() {
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                if(position == 0) {
                    Intent next = new Intent(MainActivity.this, MathActivity.class);
+                   next.putExtra("attempts", attempts);
+                   next.putExtra("total", count);
                 startActivity(next);
                } else if(position == 1) {
                    Intent next = new Intent(MainActivity.this, PhysicsActivity.class);
+                   next.putExtra("attempts", attempts);
+                   next.putExtra("total", count);
                    startActivity(next);
                } else if (position == 2) {
                    Intent next = new Intent(MainActivity.this, MarvelActivity.class);
+                   next.putExtra("attempts", attempts);
+                   next.putExtra("total", count);
                    startActivity(next);
                }
 

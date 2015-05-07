@@ -11,5 +11,6 @@
     <string name="marvel_overview">This section features questions about Marvel of varying difficulty.
         Topics may cover everything from lore to movies.</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_manager">ManagerActivity</string>
 
 </resources>

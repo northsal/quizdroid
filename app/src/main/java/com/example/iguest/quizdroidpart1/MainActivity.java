@@ -39,19 +39,19 @@ public class MainActivity extends ActionBarActivity {
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                if(position == 0) {
-                   Intent next = new Intent(MainActivity.this, TopicOverviewActivity.class);
+                   Intent next = new Intent(MainActivity.this, ManagerActivity.class);
                    next.putExtra("topic", "Math");
                    next.putExtra("attempts", attempts);
                    next.putExtra("total", count);
                 startActivity(next);
                } else if(position == 1) {
-                   Intent next = new Intent(MainActivity.this, TopicOverviewActivity.class);
+                   Intent next = new Intent(MainActivity.this, ManagerActivity.class);
                    next.putExtra("topic", "Physics");
                    next.putExtra("attempts", attempts);
                    next.putExtra("total", count);
                    startActivity(next);
                } else if (position == 2) {
-                   Intent next = new Intent(MainActivity.this, TopicOverviewActivity.class);
+                   Intent next = new Intent(MainActivity.this, ManagerActivity.class);
                    next.putExtra("topic", "Marvel");
                    next.putExtra("attempts", attempts);
                    next.putExtra("total", count);

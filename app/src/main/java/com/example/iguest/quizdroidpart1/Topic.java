@@ -1,5 +1,6 @@
 package com.example.iguest.quizdroidpart1;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -13,7 +14,9 @@ public class Topic {
     private String longDescr;
     List<Question> list; //list of questions associated with that topic
 
-    public Topic() {}
+    public Topic() {
+        list = new ArrayList<Question>();
+    }
 
     public void setTitle(String newTitle) {
         title = newTitle;

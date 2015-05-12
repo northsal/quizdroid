@@ -2,20 +2,26 @@ package com.example.iguest.quizdroidpart1;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.view.View;
 import android.util.Log;
 import android.content.Intent;
+import android.widget.TextView;
+import android.widget.TwoLineListItem;
 
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
 
     public String[] options = {"Math", "Physics", "Marvel Super Heroes"};
+    public String[] desc = {"yay", "yayay", "yayayayay"};
 
     private ListView list;
 
@@ -29,8 +35,17 @@ public class MainActivity extends ActionBarActivity {
 
         list = (ListView) findViewById(R.id.listView);
 
-        ArrayAdapter<String> items = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, options);
-        list.setAdapter(items);
+        QuizApp quizApp = (QuizApp) getApplication();
+        ArrayList<Topic> topics = (ArrayList<Topic>) quizApp.getAllTopics();
+
+        options = new String[topics.size()];
+        desc = new String[topics.size()];
+        for (int i = 0; i < topics.size(); i++) {
+                
+        }
+        CustomListAdapter adapter = new CustomListAdapter(this, options, desc);
+
+        list.setAdapter(adapter);
 
         attempts = 0;
         count = 0;

@@ -16,11 +16,7 @@ import android.app.FragmentTransaction;
 
 public class TopicOverviewFragment extends Fragment {
 
-    private int qCount;
-    private String physics = "What equation properly relates force, mass and acceleration?~~f=m*a~~f=m+a~~f=f-m~~m=f*a~~f=m*a--Which of the following are areas within physics?~~Thermodynamics~~Relativity~~Optics~~All of the above~~All of the above";
-    private String math = "What is 2 + 2?~~1~~5~~4~~6~~4";
-    private String marvel = "When was the Avengers made?~~2011~~2012~~2013~~2014~~2012";
-    private String topic;
+    private Topic topic;
 
 
     public TopicOverviewFragment() {
@@ -30,9 +26,9 @@ public class TopicOverviewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        qCount = 0;
+        //qCount = 0;
         if (getArguments() != null) {
-            topic = getArguments().getString("topic");
+            topic = (Topic) getArguments().getSerializable("TAG");
         }
     }
 
@@ -44,15 +40,9 @@ public class TopicOverviewFragment extends Fragment {
         TextView title = (TextView) v.findViewById(R.id.topicTitle);
         TextView overview = (TextView) v.findViewById(R.id.sectionDescr);
 
-        title.setText(topic);
+        title.setText(topic.getTitle());
+        overview.setText(topic.getLongDescr());
 
-        if(topic.equals("Physics")) {
-            overview.setText(R.string.physics_overview);
-        } else if (topic.equals("Math")) {
-            overview.setText(R.string.math_overview);
-        } else if(topic.equals("Marvel")) {
-            overview.setText(R.string.marvel_overview);
-        }
        final Button start = (Button) v.findViewById(R.id.btnStart);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,13 +50,8 @@ public class TopicOverviewFragment extends Fragment {
 
                 Bundle topicBundle = new Bundle();
 
-                if(topic.equals("Physics")) {
-                    topicBundle.putString("questions", physics);
-                } else if (topic.equals("Math")) {
-                    topicBundle.putString("questions", math);
-                } else if(topic.equals("Marvel")) {
-                    topicBundle.putString("questions", marvel);
-                }
+                topicBundle.putInt("index", 0);
+                topicBundle.putSerializable("QUESTIONTAG", topic);
 
                 int attempts = getArguments().getInt("attempts", 0);
                 int count = getArguments().getInt("count", 0);

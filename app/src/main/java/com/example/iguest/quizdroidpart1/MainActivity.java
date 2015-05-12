@@ -20,13 +20,15 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
-    public String[] options = {"Math", "Physics", "Marvel Super Heroes"};
-    public String[] desc = {"yay", "yayay", "yayayayay"};
+    public String[] options;
+    public String[] desc;
 
     private ListView list;
 
     private int attempts;
     private int count;
+
+    ArrayList<Topic> topics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +38,14 @@ public class MainActivity extends ActionBarActivity {
         list = (ListView) findViewById(R.id.listView);
 
         QuizApp quizApp = (QuizApp) getApplication();
-        ArrayList<Topic> topics = (ArrayList<Topic>) quizApp.getAllTopics();
+        topics = (ArrayList<Topic>) quizApp.getAllTopics();
 
         options = new String[topics.size()];
         desc = new String[topics.size()];
         for (int i = 0; i < topics.size(); i++) {
-                
+            Topic topic = topics.get(i);
+            options[i] = topic.getTitle();
+            desc[i] = topic.getShortDescr();
         }
         CustomListAdapter adapter = new CustomListAdapter(this, options, desc);
 
@@ -53,25 +57,13 @@ public class MainActivity extends ActionBarActivity {
         list.setOnItemClickListener(new ListView.OnItemClickListener() {
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-               if(position == 0) {
                    Intent next = new Intent(MainActivity.this, ManagerActivity.class);
-                   next.putExtra("topic", "Math");
+                   Topic entry = topics.get(position);
+                   next.putExtra("topic", entry.getTitle());
                    next.putExtra("attempts", attempts);
                    next.putExtra("total", count);
-                startActivity(next);
-               } else if(position == 1) {
-                   Intent next = new Intent(MainActivity.this, ManagerActivity.class);
-                   next.putExtra("topic", "Physics");
-                   next.putExtra("attempts", attempts);
-                   next.putExtra("total", count);
+                   next.putExtra("Questions", entry);
                    startActivity(next);
-               } else if (position == 2) {
-                   Intent next = new Intent(MainActivity.this, ManagerActivity.class);
-                   next.putExtra("topic", "Marvel");
-                   next.putExtra("attempts", attempts);
-                   next.putExtra("total", count);
-                   startActivity(next);
-               }
 
            }
         });

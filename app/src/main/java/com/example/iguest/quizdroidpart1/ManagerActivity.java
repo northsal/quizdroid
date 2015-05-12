@@ -11,8 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 
+import java.util.ArrayList;
+
 
 public class ManagerActivity extends ActionBarActivity {
+
+    public static int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +27,9 @@ public class ManagerActivity extends ActionBarActivity {
             Bundle topicBundle = new Bundle();
             Intent launchingIntent = getIntent();
 
-            String topic = launchingIntent.getStringExtra("topic");
-            if(topic.equals("Physics")) {
-                topicBundle.putString("topic", "Physics");
-            } else if (topic.equals("Math")) {
-                topicBundle.putString("topic", "Math");
-            } else if(topic.equals("Marvel")) {
-                topicBundle.putString("topic", "Marvel");
-            }
+            Topic realTopic = (Topic) launchingIntent.getSerializableExtra("Questions");
+
+            topicBundle.putSerializable("TAG", realTopic);
 
             int attempts = launchingIntent.getIntExtra("attempts", 0);
             int count = launchingIntent.getIntExtra("count", 0);

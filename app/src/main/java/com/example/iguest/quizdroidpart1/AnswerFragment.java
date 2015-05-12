@@ -19,6 +19,8 @@ public class AnswerFragment extends Fragment {
     private String questions;
     private String answer;
     private String correct;
+    private Topic topic;
+    private int index;
 
     public AnswerFragment() {
         // Required empty public constructor
@@ -31,7 +33,8 @@ public class AnswerFragment extends Fragment {
             correct = getArguments().getString("correctAnswer");
             answer = getArguments().getString("user");
             questions = getArguments().getString("questions");
-
+            topic = (Topic) getArguments().getSerializable("ANSWERTAG");
+            index = getArguments().getInt("index");
         }
     }
 
@@ -61,13 +64,14 @@ public class AnswerFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(questions.length() == 0) {
+                if(index == (topic.getQuestions()).size()) {
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), MainActivity.class);
                     getActivity().startActivity(intent);
                 } else {
                     Bundle topicBundle = new Bundle();
-                    topicBundle.putString("questions", questions);
+                    topicBundle.putSerializable("QUESTIONTAG", topic);
+                    topicBundle.putInt("index", index);
 
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();

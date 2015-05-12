@@ -16,11 +16,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 
 public class QuestionFragment extends Fragment {
 
-    private String questionsList;
+    private Question question;
     private Button button;
+    private Topic topic;
+    private int index;
     public QuestionFragment() {
         // Required empty public constructor
     }
@@ -30,7 +34,11 @@ public class QuestionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            questionsList = getArguments().getString("questions");
+            topic = (Topic) getArguments().getSerializable("QUESTIONTAG");
+            ArrayList<Question> questionsList = (ArrayList<Question>) topic.getQuestions();
+            index = getArguments().getInt("index");
+            question = questionsList.get(index);
+
         }
     }
 
@@ -39,34 +47,23 @@ public class QuestionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.activity_main_question, container, false);
-        String[] questions = questionsList.split("--");
-        String[] question = questions[0].split("~~");
 
         TextView topicQuestion = (TextView) v.findViewById(R.id.topicQuestion);
         RadioButton radio1 = (RadioButton) v.findViewById(R.id.answer1);
         RadioButton radio2 = (RadioButton) v.findViewById(R.id.answer2);
         RadioButton radio3 = (RadioButton) v.findViewById(R.id.answer3);
         RadioButton radio4 = (RadioButton) v.findViewById(R.id.answer4);
-        topicQuestion.setText(question[0]);
-        radio1.setText(question[1]);
-        radio2.setText(question[2]);
-        radio3.setText(question[3]);
-        radio4.setText(question[4]);
+        topicQuestion.setText(question.getQuestion());
+        radio1.setText((question.getOptions())[0]);
+        radio2.setText((question.getOptions())[1]);
+        radio3.setText((question.getOptions())[2]);
+        radio4.setText((question.getOptions())[3]);
 
-        final String answer = question[5];
-
-        //rg = (RadioGroup) v.findViewById(R.id.topicRadioGroup);
+        final String answer = (question.getOptions())[question.getAnswer() - 1];
 
         button = (Button) v.findViewById(R.id.btnSubmit);
         button.setVisibility(View.GONE);
 
-        String remainingQuestions = "";
-        if(questions.length > 1) {
-            for (int i = 1; i < questions.length; i++) {
-                remainingQuestions = questions[i] + "--";
-            }
-        }
-        final String finalQuestions = remainingQuestions;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,8 +76,10 @@ public class QuestionFragment extends Fragment {
                 int id = rg.getCheckedRadioButtonId();
                 RadioButton rb = (RadioButton) getView().findViewById(id);
 
+                index++;
                 Bundle topicBundle = new Bundle();
-                topicBundle.putString("questions", finalQuestions);
+                topicBundle.putSerializable("ANSWERTAG", topic);
+                topicBundle.putInt("index", index);
                 topicBundle.putString("correctAnswer", answer);
                 topicBundle.putString("user", (String) rb.getText());
 

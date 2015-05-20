@@ -1,6 +1,8 @@
 package com.example.iguest.quizdroidpart1;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -21,6 +23,8 @@ public class QuizApp extends Application implements ITopicRepository {
 
     private static QuizApp ourInstance; //singleton
     private ArrayList<Topic> repo;
+    PendingIntent alarmIntent = null;
+    AlarmManager am;
 
     public static QuizApp getInstance() {
         return ourInstance;

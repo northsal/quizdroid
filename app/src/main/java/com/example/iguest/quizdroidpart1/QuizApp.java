@@ -16,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -51,7 +53,7 @@ public class QuizApp extends Application implements ITopicRepository {
     public void onCreate() {
         super.onCreate();
         Log.d("QuizApp", "onCreate fired!");
-
+/*
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         interval = Integer.parseInt(sharedPrefs.getString("prefFreq", "1"));
         final Context app = getApplicationContext();
@@ -87,7 +89,7 @@ public class QuizApp extends Application implements ITopicRepository {
             }
         };
 
-        sharedPrefs.registerOnSharedPreferenceChangeListener(listener);
+        sharedPrefs.registerOnSharedPreferenceChangeListener(listener); */
 
         this.repo = new ArrayList<Topic>();
 
@@ -128,6 +130,8 @@ public class QuizApp extends Application implements ITopicRepository {
             e.printStackTrace();
         }
 
+        DownloadService.startOrStopAlarm(this, true);
+
     }
 
     public String loadJSONFromAsset() {
@@ -146,6 +150,21 @@ public class QuizApp extends Application implements ITopicRepository {
         return json;
 
     }
+
+    public void writeToFile(String data) {
+        try {
+            Log.i("MyApp", "writing downloaded to file");
+
+            File file = new File(getFilesDir().getAbsolutePath(), "questions.json");
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(data.getBytes());
+            fos.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
     public List<Topic> getAllTopics() {return repo;}
 }
 

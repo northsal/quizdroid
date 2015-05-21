@@ -7,7 +7,9 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class DownloadService extends IntentService {
@@ -33,7 +35,8 @@ public class DownloadService extends IntentService {
         // Hooray! This method is called where the AlarmManager shouldve started the download service and we just received it here!
 
         // Specify the url you want to download here
-        String url = "http://www.EricCheeIsAwesome.com/data.json";
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String url = sharedPrefs.getString("prefURL", "http://tednewardsandbox.site44.com/questions.json");
 
         Log.i("DownloadService", "should be downloading here");
 

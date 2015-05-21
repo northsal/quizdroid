@@ -17,12 +17,14 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i("AlarmReceiver", "entered onReceive() from AlarmReceiver");
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String url = sharedPrefs.getString("prefURL", "http://tednewardsandbox.site44.com/questions.json");
+        //SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        //String url = sharedPrefs.getString("prefURL", "http://tednewardsandbox.site44.com/questions.json");
 
         Log.i("QuizApp", "Fired!");
+        Intent downloadServiceIntent = new Intent(context, DownloadService.class);
+        context.startService(downloadServiceIntent);
 
-       Toast.makeText(context, url, Toast.LENGTH_SHORT).show();
+       //Toast.makeText(context, url, Toast.LENGTH_SHORT).show();
     }
 
 

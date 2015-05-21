@@ -7,6 +7,7 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -22,7 +23,9 @@ public class DownloadService extends IntentService {
     }
 
     @Override
-    public void onCreate() { super.onCreate(); }
+    public void onCreate() {
+        super.onCreate();
+    }
 
     @Override
     public void onDestroy() {
@@ -50,6 +53,9 @@ public class DownloadService extends IntentService {
     public static void startOrStopAlarm(Context context, boolean on) {
         Log.i("DownloadService", "startOrStopAlarm on = " + on);
 
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int interval = Integer.parseInt(sharedPrefs.getString("prefFreq", "5"));
+
         Intent alarmReceiverIntent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, MY_ALARM, alarmReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -61,7 +67,7 @@ public class DownloadService extends IntentService {
             Log.i("DownloadService", "setting alarm to " + refreshInterval);
 
             // Start the alarm manager to repeat
-            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), refreshInterval, pendingIntent);
+            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);
         }
         else {
             manager.cancel(pendingIntent);

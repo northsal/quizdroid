@@ -3,8 +3,14 @@ package com.example.iguest.quizdroidpart1;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,15 +22,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by iguest on 5/10/15.
- */
 public class QuizApp extends Application implements ITopicRepository {
 
     private static QuizApp ourInstance; //singleton
     private ArrayList<Topic> repo;
     PendingIntent alarmIntent = null;
-    AlarmManager am;
+    AlarmManager am = null;
+    final String MY_ACTION = "setupAlarm";
+    String url;
+    int interval;
+    SharedPreferences.OnSharedPreferenceChangeListener listener;
+
+
 
     public static QuizApp getInstance() {
         return ourInstance;
@@ -42,6 +51,43 @@ public class QuizApp extends Application implements ITopicRepository {
     public void onCreate() {
         super.onCreate();
         Log.d("QuizApp", "onCreate fired!");
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        interval = Integer.parseInt(sharedPrefs.getString("prefFreq", "1"));
+        final Context app = getApplicationContext();
+
+        am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        IntentFilter intentFilter = new IntentFilter(MY_ACTION);
+        AlarmReceiver aReceiver = new AlarmReceiver();
+        registerReceiver(aReceiver, intentFilter);
+        Intent intent = new Intent();
+        intent.setAction(MY_ACTION);
+        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        am.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + (interval * 60000),
+                        (interval * 60000), alarmIntent);
+
+        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                Log.i("QuizApp", "Change!");
+                if(am != null) {
+                    am.cancel(alarmIntent);
+                    alarmIntent.cancel();
+                }
+                interval = Integer.parseInt(prefs.getString("prefFreq", "1"));
+                am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                IntentFilter intentFilter = new IntentFilter(MY_ACTION);
+                AlarmReceiver aReceiver = new AlarmReceiver();
+                registerReceiver(aReceiver, intentFilter);
+                Intent intent = new Intent();
+                intent.setAction(MY_ACTION);
+                alarmIntent = PendingIntent.getBroadcast(app, 0, intent, 0);
+                am.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + (interval * 60000),
+                                (interval * 60000), alarmIntent);
+
+            }
+        };
+
+        sharedPrefs.registerOnSharedPreferenceChangeListener(listener);
 
         this.repo = new ArrayList<Topic>();
 
@@ -87,20 +133,12 @@ public class QuizApp extends Application implements ITopicRepository {
     public String loadJSONFromAsset() {
         String json = null;
         try {
-
             InputStream is = getAssets().open("questions.json");
-
             int size = is.available();
-
             byte[] buffer = new byte[size];
-
             is.read(buffer);
-
             is.close();
-
             json = new String(buffer, "UTF-8");
-
-
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;
@@ -109,5 +147,5 @@ public class QuizApp extends Application implements ITopicRepository {
 
     }
     public List<Topic> getAllTopics() {return repo;}
-
 }
+
